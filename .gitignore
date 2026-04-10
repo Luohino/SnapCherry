@@ -1,0 +1,8 @@
+# Binaries
+*.exe
+*.o
+*.a
+
+# Local data
+Screenshots/
+SnapCherry.txt

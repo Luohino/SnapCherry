@@ -1,0 +1,33 @@
+name: CI-Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          
+    - name: Build SnapCherry
+      shell: msys2 {0}
+      run: |
+        gcc SnapCherry.c -o SnapCherry.exe -mwindows -luser32 -lgdi32 -lole32 -lwindowscodecs -lmsimg32 -lshlwapi -lshell32 -loleaut32 -luuid
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SnapCherry-Binary
+        path: SnapCherry.exe
